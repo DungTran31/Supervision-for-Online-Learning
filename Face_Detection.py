@@ -129,28 +129,12 @@ while cap.isOpened():
 
         if preds > 0.5:
             label = "spoof"
-            cv2.putText(
-                image,
-                label,
-                (x, y - 10),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                0.5,
-                (0, 0, 255),
-                2,
-            )
-            cv2.rectangle(image, (x, y), (x + w, y + h + 50), (0, 0, 255), 2)
+            cv2.putText(image, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+            cv2.rectangle(image, (x, y), (x + w, y + h + (h * 0.1)), (0, 0, 255), 2)
         else:
             label = "real"
-            cv2.putText(
-                image,
-                label,
-                (x, y - 10),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                0.5,
-                (0, 255, 0),
-                2,
-            )
-            cv2.rectangle(image, (x, y), (x + w, y + h + 50), (0, 255, 0), 2)
+            cv2.putText(image, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.rectangle(image, (x, y), (x + w, y + h + (h * 0.1)), (0, 255, 0), 2)
 
     # Eye tracking and drowsiness detection
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
