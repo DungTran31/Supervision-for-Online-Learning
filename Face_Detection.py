@@ -45,7 +45,11 @@ frame_rate = 20
 eyes_closed_warning_counter = 0
 eyes_closed_warning_duration = 60 * frame_rate
 closed_eyes_counter = 0
-closed_eyes_threshold = 5 * frame_rate  # Number of seconds to detect closed eyes
+closed_eyes_threshold = 2 * frame_rate  # Number of seconds to detect closed eyes
+head_orientation_warning_duration = 30 * frame_rate  # Duration to display head orientation warnings
+head_orientation_counter = 0
+head_direction_counter = 0
+head_direction_threshold = 2 * frame_rate
 
 while cap.isOpened():
     success, image = cap.read()
@@ -88,13 +92,13 @@ while cap.isOpened():
             y = angles[1] * 360
             z = angles[2] * 360
 
-            if y < -10:
+            if y < -15:
                 text = "Looking Left"
-            elif y > 10:
+            elif y > 15:
                 text = "Looking Right"
-            elif x < -10:
+            elif x < -15:
                 text = "Looking Down"
-            elif x > 10:
+            elif x > 15:
                 text = "Looking Up"
             else:
                 text = "Forward"
@@ -107,6 +111,21 @@ while cap.isOpened():
             # cv2.putText(image, "x: " + str(np.round(x, 2)), (500, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
             # cv2.putText(image, "y: " + str(np.round(y, 2)), (500, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
             # cv2.putText(image, "z: " + str(np.round(z, 2)), (500, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+
+            if text != "Forward" and text != "Looking Up":
+                head_direction_counter += 1
+                # print("head_direction_counter " + str(head_direction_counter))
+                if head_direction_counter >= head_direction_threshold:
+                    head_orientation_counter = head_orientation_warning_duration
+                    # print("Focus on the lesson!")
+            else:
+                head_direction_counter = 0
+
+            # print(text)
+            if head_orientation_counter > 0:
+                cv2.putText(image, "Focus on the lesson", (20, 300),
+                            cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 4)
+                head_orientation_counter -= 1
 
             mp_drawing.draw_landmarks(
                 image=image,
@@ -177,10 +196,10 @@ while cap.isOpened():
         EAR = round(EAR, 2)
         if EAR < 0.2:
             closed_eyes_counter += 1
-            print("closed_eyes_counter " + str(closed_eyes_counter))
+            # print("closed_eyes_counter " + str(closed_eyes_counter))
             if closed_eyes_counter >= closed_eyes_threshold:
                 eyes_closed_warning_counter = eyes_closed_warning_duration
-                print("Drowsy")
+            print("Drowsy")
         else:
             closed_eyes_counter = 0  # Reset the counter if eyes are open
 
@@ -196,7 +215,7 @@ while cap.isOpened():
     fps = 1 / totalTime
     cv2.putText(image, f'FPS: {int(fps)}', (20, 450), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 255, 0), 2)
     print("FPS: " + str(fps))
-    cv2.imshow('Combined', image)
+    cv2.imshow('Face_Detection', image)
 
     if cv2.waitKey(5) & 0xFF == 27:
         break
