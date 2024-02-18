@@ -41,9 +41,11 @@ cap = cv2.VideoCapture(0)
 hog_face_detector = dlib.get_frontal_face_detector()
 dlib_facelandmark = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
 
-start_time = time.time()
-look_away_warning = False
-eyes_closed_warning = False
+frame_rate = 20
+eyes_closed_warning_counter = 0
+eyes_closed_warning_duration = 60 * frame_rate
+closed_eyes_counter = 0
+closed_eyes_threshold = 5 * frame_rate  # Number of seconds to detect closed eyes
 
 while cap.isOpened():
     success, image = cap.read()
@@ -130,11 +132,11 @@ while cap.isOpened():
         if preds > 0.5:
             label = "spoof"
             cv2.putText(image, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-            cv2.rectangle(image, (x, y), (x + w, y + h + (h * 0.1)), (0, 0, 255), 2)
+            cv2.rectangle(image, (x, y), (x + w, y + h + 50), (0, 0, 255), 2)
         else:
             label = "real"
             cv2.putText(image, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-            cv2.rectangle(image, (x, y), (x + w, y + h + (h * 0.1)), (0, 255, 0), 2)
+            cv2.rectangle(image, (x, y), (x + w, y + h + 50), (0, 255, 0), 2)
 
     # Eye tracking and drowsiness detection
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -174,15 +176,26 @@ while cap.isOpened():
         EAR = (left_ear + right_ear) / 2
         EAR = round(EAR, 2)
         if EAR < 0.2:
+            closed_eyes_counter += 1
+            print("closed_eyes_counter " + str(closed_eyes_counter))
+            if closed_eyes_counter >= closed_eyes_threshold:
+                eyes_closed_warning_counter = eyes_closed_warning_duration
+                print("Drowsy")
+        else:
+            closed_eyes_counter = 0  # Reset the counter if eyes are open
+
+        print(EAR)
+
+        if eyes_closed_warning_counter > 0:
             cv2.putText(image, "Are you Sleepy?", (20, 400),
                         cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 4)
-            print("Drowsy")
-        print(EAR)
+            eyes_closed_warning_counter -= 1
 
     end = time.time()
     totalTime = end - start
     fps = 1 / totalTime
     cv2.putText(image, f'FPS: {int(fps)}', (20, 450), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 255, 0), 2)
+    print("FPS: " + str(fps))
     cv2.imshow('Combined', image)
 
     if cv2.waitKey(5) & 0xFF == 27:
