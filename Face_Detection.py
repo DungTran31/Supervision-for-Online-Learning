@@ -124,7 +124,7 @@ while cap.isOpened():
             # print(text)
             if head_orientation_counter > 0:
                 cv2.putText(image, "Focus on the lesson", (20, 300),
-                            cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 4)
+                            cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 4)
                 head_orientation_counter -= 1
 
             mp_drawing.draw_landmarks(
