@@ -10,9 +10,9 @@ firebase_admin.initialize_app(cred, {
 ref = db.reference('Students')
 
 data = {
-    "222111532":
+    "222631141":
         {
-            "name": "Elon Musk",
+            "name": "Nguyen Mai Thanh",
             "major": "Physics",
             "starting_year": 2020,
             "total_attendance": 6,
@@ -29,16 +29,6 @@ data = {
             "standing": "G",
             "year": 2,
             "last_attendance_time": "2024-01-12 09:25:24"
-        },
-    "222631022":
-        {
-            "name": "Emily Blunt",
-            "major": "Economics",
-            "starting_year": 2021,
-            "total_attendance": 2,
-            "standing": "B",
-            "year": 3,
-            "last_attendance_time": "2024-01-03 13:54:34"
         }
 }
 
