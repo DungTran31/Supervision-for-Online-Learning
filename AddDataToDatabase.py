@@ -10,16 +10,6 @@ firebase_admin.initialize_app(cred, {
 ref = db.reference('Students')
 
 data = {
-    "222111532":
-        {
-            "name": "Elon Musk",
-            "major": "Physics",
-            "starting_year": 2020,
-            "total_attendance": 6,
-            "standing": "G",
-            "year": 4,
-            "last_attendance_time": "2024-01-11 13:54:34"
-        },
     "222611080":
         {
             "name": "Tran Tien Dung",
@@ -30,15 +20,45 @@ data = {
             "year": 2,
             "last_attendance_time": "2024-01-12 09:25:24"
         },
-    "222631022":
+    "222631105":
         {
-            "name": "Emily Blunt",
-            "major": "Economics",
-            "starting_year": 2021,
+            "name": "Vu Quang Huy",
+            "major": "Information Technology",
+            "starting_year": 2022,
             "total_attendance": 2,
+            "standing": "N",
+            "year": 2,
+            "last_attendance_time": "2024-03-11 13:04:24"
+        },
+    "222631124":
+        {
+            "name": "Nguyen Minh",
+            "major": "Information Technology",
+            "starting_year": 2022,
+            "total_attendance": 6,
             "standing": "B",
-            "year": 3,
-            "last_attendance_time": "2024-01-03 13:54:34"
+            "year": 2,
+            "last_attendance_time": "2024-01-12 15:25:34"
+        },
+    "222631132":
+        {
+            "name": "Nguyen Minh Quan",
+            "major": "Information Technology",
+            "starting_year": 2022,
+            "total_attendance": 10,
+            "standing": "G",
+            "year": 2,
+            "last_attendance_time": "2024-02-12 09:25:44"
+        },
+    "222631141":
+        {
+            "name": "Nguyen Mai Thanh",
+            "major": "Information Technology",
+            "starting_year": 2022,
+            "total_attendance": 12,
+            "standing": "G",
+            "year": 2,
+            "last_attendance_time": "2024-01-12 09:35:22"
         }
 }
 
